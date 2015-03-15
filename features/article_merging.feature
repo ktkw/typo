@@ -61,5 +61,5 @@ Feature: Article Merging
 	Scenario: title should be one of the original ones (pick the first)
 		Given that the articles with ids "21 and "22" were merged
 		And I am on the home page
-		I should see "TitleA"
-		I should not see "TitleB"
+		Then I should see "TitleA"
+		And I should not see "TitleB"
