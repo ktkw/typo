@@ -66,7 +66,12 @@ class Article < Content
     other_article = Article.find_by_id(other_id)
 
     self.body = self.body + " " + other_article.body
-    self.comments << other_article.comments
+    #self.comments += other_article.comments
+
+    comments = Comment.where('article_id in (?)', [self.id, other_article.id])
+    comments.each do |com|
+      self.comments << Comment.new(com.attributes.except('article_id'))
+    end
 
     self.save!
     other_article.destroy

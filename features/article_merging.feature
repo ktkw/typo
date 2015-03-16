@@ -21,20 +21,15 @@ Feature: Article Merging
 			| 4  	| TitleB	| test_b | bodB | true 		| published | 12		| true				| Article	| 2015-03-10 20:00:00	|
 			| 5  	| TitleC	| test_c | bodC | true 		| published | 13		| true 				| Article	| 2015-03-10 19:00:00	|
 
-#        Given the following comments exist:
-#            | id | type    | author | body     | article_id | user_id | created_at          |
-#            | 1  | Comment | test_a | Comment1 | 3          | 11      | 2012-23-11 21:31:00 |
-#            | 2  | Comment | test_a | Comment2 | 4          | 11      | 2012-24-11 22:01:00 |
-
 		Given the following comments exist:
 			| id | type		| author | body | article_id | user_id	| created_at			|
-			| 1  | Comment	| test_a | cmA1 | 4			 | 11		| 2015 03-11 21:00:00	|
-			| 2  | Comment	| test_a | cmB1 | 4			 | 11		| 2015 03-11 21:00:01	|
+			| 1  | Comment	| test_a | cmA1 | 5			 | 11		| 2015 03-11 21:00:00	|
+			| 2  | Comment	| test_a | cmB1 | 5			 | 11		| 2015 03-11 21:00:01	|
 
 
 	Scenario: non-admin cannot merge articles
-		Given that I am logged in as "test_a" with password "password"
-		Given I am on the edit page for article id 1
+		Given that I am logged in as "user1" with password "aaaaaaaa"
+		Given I am on the edit page for article id 4
 		Then I should not see "Merge Articles"
 
 	Scenario: admin can merge articles
@@ -43,29 +38,22 @@ Feature: Article Merging
 		Then I should see "Merge Articles"
 
 	Scenario: merged article should contain text of both articles
+		Given that I am logged in as "admin" with password "aaaaaaaa"	
 		Given that the articles with ids "3 and "4" were merged
 		And I am on the home page
-		#Then show me the page
 		Then I should see "TitleA"
-		Given that I go to "TitleA" from "2015/03/10"
-		Then I should see "bodA"
-		And I should see "bodB"
+		Then I should see "bodA bodB"
 
 	Scenario: merged article should have one of the authors
+		Given that I am logged in as "admin" with password "aaaaaaaa"	
 		Given that the articles with ids "3 and "4" were merged
 		And I am on the home page
 		Then I should see "TitleA"
-		And "test_a" should be the author of article "TitleA TitleB"
+		And "test_a" should be the author of article "TitleA"
 
 	Scenario: comments of articles need to carry over to the merged article
-		Given that the articles with ids "3 and "4" were merged
+		Given that I am logged in as "admin" with password "aaaaaaaa"	
+		Given that the articles with ids "3 and "5" were merged
 		And I am on the home page
-		When I follow "TitleA"
-		Then I should see "cmC1"
-		And I should see "cmC2"
-
-	Scenario: title should be one of the original ones (pick the first)
-		Given that the articles with ids "3 and "4" were merged
-		And I am on the home page
-		Then I should see "TitleA"
-		And I should not see "TitleB"
+		Then show me the page
+		Then I should see "2 comments"

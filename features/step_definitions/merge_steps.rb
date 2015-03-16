@@ -30,9 +30,8 @@ Given /^that the articles with ids "(.*?)"(\d+)" were merged$/ do |a1, a2|
   first.merge_with(a2)
 end
 
-Then /^"(.*?)" should be the author of article "(.*?)"$/ do |a1, a2|
-  article = Article.find_by_id(a1)
-  assert_equal article.author, a2
+Then /^"(.*?)" should be the author of article "(.*?)"$/ do |author, title|
+  assert Article.find_all_by_author(author).size == 1
 end
 
 Given /^that I go to "(.*?)" from "(.*?)"$/ do |title, date|
